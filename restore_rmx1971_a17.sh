@@ -70,6 +70,20 @@ if [ -d "vendor/lineage" ]; then
     done
 fi
 
+# Hardware Lineage Compat (libgui_shim symbol update for A17)
+if [ -d "hardware/lineage/compat" ]; then
+    echo "Checking hardware/lineage/compat..."
+    for p in "$SCRIPT_DIR/hardware_lineage_compat/"*.patch; do
+        [ -f "$p" ] || continue
+        if git -C hardware/lineage/compat apply --check "$p" 2>/dev/null; then
+            git -C hardware/lineage/compat am "$p"
+            echo "  ✓ Applied $(basename "$p")"
+        else
+            echo "  (hardware/lineage/compat patch already present or applied)"
+        fi
+    done
+fi
+
 # Device tree patches (if missing)
 if [ -d "device/realme/RMX1971" ]; then
     echo "Checking device/realme/RMX1971..."
