@@ -1,0 +1,107 @@
+From f46057bdbcbb9689e569ae7db22c1ffea4953b62 Mon Sep 17 00:00:00 2001
+From: gaurav-paul9 <paulgaurav9@gmail.com>
+Date: Sun, 11 Oct 2026 06:36:39 +0000
+Subject: [PATCH] RMX1971: Adapt vendor tree for Android 17 (LineageOS 24.0)
+
+- Switch soong_namespace import to hardware/qcom-caf/sdm660
+- Remove deprecated libdisplaydebug and libheif references
+- Bump libwfdservice audio common types dependency to V5 and patch DT_NEEDED
+---
+ Android.bp                                  |  11 ++---------
+ proprietary/system_ext/lib/libwfdservice.so | Bin 264389 -> 296353 bytes
+ 2 files changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/Android.bp b/Android.bp
+index 2c55851..3a2d6d2 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -5,7 +5,7 @@
+ soong_namespace {
+     imports: [
+         "device/realme/RMX1971",
+-        "hardware/qcom-caf/sdm845",
++        "hardware/qcom-caf/sdm660",
+         "hardware/qcom-caf/wlan",
+         "vendor/qcom/opensource/commonsys-intf/display",
+         "vendor/qcom/opensource/commonsys/display",
+@@ -12015,7 +12015,6 @@ cc_prebuilt_library_shared {
+             shared_libs: [
+                 "libdrm",
+                 "libdrmutils",
+-                "libdisplaydebug",
+                 "libc++",
+                 "libc",
+                 "libm",
+@@ -12044,7 +12043,6 @@ cc_prebuilt_library_shared {
+                 "libcutils",
+                 "libbinder",
+                 "libutils",
+-                "libdisplaydebug",
+                 "libtinyxml2_1",
+                 "libc++",
+                 "libc",
+@@ -12073,7 +12071,6 @@ cc_prebuilt_library_shared {
+                 "libdiag",
+                 "libsdmutils",
+                 "libbinder",
+-                "libdisplaydebug",
+                 "libc++",
+                 "libc",
+                 "libm",
+@@ -12098,7 +12095,6 @@ cc_prebuilt_library_shared {
+                 "proprietary/vendor/lib64/libsdm-disp-vndapis.so",
+             ],
+             shared_libs: [
+-                "libdisplaydebug",
+                 "libqservice",
+                 "libbinder",
+                 "libcutils",
+@@ -12128,7 +12124,6 @@ cc_prebuilt_library_shared {
+                 "proprietary/vendor/lib64/libsdmextension.so",
+             ],
+             shared_libs: [
+-                "libdisplaydebug",
+                 "libsdmutils",
+                 "libdisplayqos",
+                 "libsdm-color",
+@@ -16042,7 +16037,6 @@ cc_prebuilt_library_shared {
+                 "libjpeg",
+                 "libpiex",
+                 "libpng",
+-                "libheif",
+                 "libnativewindow",
+                 "libEGL",
+                 "libGLESv2",
+@@ -16074,7 +16068,6 @@ cc_prebuilt_library_shared {
+                 "libjpeg",
+                 "libpiex",
+                 "libpng",
+-                "libheif",
+                 "libnativewindow",
+                 "libEGL",
+                 "libGLESv2",
+@@ -16809,7 +16802,7 @@ cc_prebuilt_library_shared {
+                 "libaudioclient",
+                 "libaudiofoundation",
+                 "audioclient-types-aidl-cpp",
+-                "android.media.audio.common.types-V4-cpp",
++                "android.media.audio.common.types-V5-cpp",
+                 "libwfdmmsrc_system",
+                 "libwfdavenhancements",
+                 "libhidlbase",
+diff --git a/proprietary/system_ext/lib/libwfdservice.so b/proprietary/system_ext/lib/libwfdservice.so
+index 4ca70178102ed436e2df1f49b134cbd940730cd9..97900892018d2dd5f5c79042c9c4b6dc4ae82a3b 100644
+GIT binary patch
+delta 174
+zcmX>)QD9-W&;%Vu-if;6tP2<!7#3{w%w|*oG8h;HSm1a;DNqK8*}&oq44V%!dMGx_
+zD7VWfGj5krW}0${3#NQ->GXYlOtZE>c*?YfbK3_dokfgA({(2?pXUUr-~t*jcRK52
+xX79~g7&8<%Utsis6GejCccn4gvu_Wa%v@MHeF8g+60fOlazTM!aX!di1^|2CE*<~?
+
+delta 108
+zcmZ43Ep&9Ezyuveo{75RtPP9|3=JDSvl%x(WVBYC{DD!oSw^{CMwxNDj55=dLtFuq
+znHfO1sC4?iKBigQFQhRWa87Sn#Z<HH1C!1oM*Zo!lbFwQf|PJEFfbHNXPwOKy-k3n
+JsFWGV1psQ|AvOR2
+
+-- 
+2.43.0
+

@@ -1,0 +1,49 @@
+From 43da206579616be1a9d35146496b63d6c89af5ff Mon Sep 17 00:00:00 2001
+From: gaurav-paul9 <paulgaurav9@gmail.com>
+Date: Sun, 11 Oct 2026 06:18:47 +0000
+Subject: [PATCH] soong: generator: Disable sbox and fix clean_headers.sh
+ invocation
+
+Change-Id: I46497f7531757cf1e9f6f62659b443cb691bc0f5
+---
+ build/soong/generator/generator.go | 4 +---
+ tools/clean_headers.sh             | 9 ++++++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/build/soong/generator/generator.go b/build/soong/generator/generator.go
+index c70ef5f..882ca6d 100644
+--- a/build/soong/generator/generator.go
++++ b/build/soong/generator/generator.go
+@@ -258,11 +258,9 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
+ 	// Dummy output dep
+ 	dummyDep := android.PathForModuleGen(ctx, ".dummy_dep")
+ 
+-	genDir := android.PathForModuleGen(ctx)
+-	manifestPath := android.PathForModuleOut(ctx, "generator.sbox.textproto")
+ 
+ 	// Use a RuleBuilder to create a rule that runs the command inside an sbox sandbox.
+-	rule := android.NewRuleBuilder(pctx, ctx).Sbox(genDir, manifestPath)
++	rule := android.NewRuleBuilder(pctx, ctx)
+ 
+ 	rule.Command().
+ 		Text(rawCommand).
+diff --git a/tools/clean_headers.sh b/tools/clean_headers.sh
+index 44053a3..a3c0602 100755
+--- a/tools/clean_headers.sh
++++ b/tools/clean_headers.sh
+@@ -3,6 +3,9 @@ set -eu
+ 
+ export ANDROID_BUILD_TOP="$PWD"
+ 
+-./bionic/libc/kernel/tools/clean_header.py -u \
+-    "$1/usr/include/asm/signal.h" \
+-    "$1/usr/include/asm-generic/signal.h"
++./bionic/libc/kernel/tools/clean_header.py \
++    -k "$1/usr/include" \
++    -d "$1/usr/include" \
++    -u \
++    asm/signal.h \
++    asm-generic/signal.h
+-- 
+2.43.0
+

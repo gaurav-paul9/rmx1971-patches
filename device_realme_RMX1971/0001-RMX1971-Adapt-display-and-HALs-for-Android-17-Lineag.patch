@@ -1,0 +1,72 @@
+From 50373efbf5240dc8a52bac76fc01a4d5d60d05f9 Mon Sep 17 00:00:00 2001
+From: gaurav-paul9 <paulgaurav9@gmail.com>
+Date: Sun, 11 Oct 2026 06:36:27 +0000
+Subject: [PATCH] RMX1971: Adapt display and HALs for Android 17 (LineageOS
+ 24.0)
+
+- Switch HAL paths and Soong namespace to hardware/qcom-caf/sdm660
+- Update display stack to mapper@3.0/@4.0 and display allocator-service
+- Bump libwfdservice audio common types replacement to V5
+---
+ device.mk        | 13 +++++++------
+ extract-files.py |  2 +-
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/device.mk b/device.mk
+index 50d64dd..c6e83f1 100644
+--- a/device.mk
++++ b/device.mk
+@@ -111,12 +111,13 @@ PRODUCT_PACKAGES += \
+ # Display
+ PRODUCT_PACKAGES += \
+     android.hardware.graphics.composer@2.3-service \
+-    android.hardware.graphics.mapper@2.0-impl-qti-display \
++    android.hardware.graphics.mapper@3.0-impl-qti-display \
++    android.hardware.graphics.mapper@4.0-impl-qti-display \
+     gralloc.sdm710 \
+     hwcomposer.qcom \
+     libvulkan \
+     vendor.qti.hardware.memtrack-service \
+-    vendor.qti.hardware.display.allocator@1.0-service
++    vendor.qti.hardware.display.allocator-service
+ 
+ # Dexpreopt
+ PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := verify
+@@ -169,9 +170,9 @@ PRODUCT_BOARD_PLATFORM := sdm845
+ PRODUCT_USES_QCOM_HARDWARE := true
+ 
+ # HALS
+-SRC_AUDIO_HAL_DIR := hardware/qcom-caf/sdm845/audio
+-SRC_DISPLAY_HAL_DIR := hardware/qcom-caf/sdm845/display
+-SRC_MEDIA_HAL_DIR := hardware/qcom-caf/sdm845/media
++SRC_AUDIO_HAL_DIR := hardware/qcom-caf/sdm660/audio
++SRC_DISPLAY_HAL_DIR := hardware/qcom-caf/sdm660/display
++SRC_MEDIA_HAL_DIR := hardware/qcom-caf/sdm660/media
+ 
+ # Init
+ $(call soong_config_set,libinit,vendor_init_lib,//$(LOCAL_PATH):libinit_RMX1971)
+@@ -380,7 +381,7 @@ PRODUCT_SOONG_NAMESPACES += \
+     $(LOCAL_PATH) \
+     bootable/deprecated-ota \
+     vendor/qcom/opensource/usb/etc \
+-    hardware/qcom-caf/sdm845 \
++    hardware/qcom-caf/sdm660 \
+     hardware/google/interfaces \
+     hardware/google/pixel \
+     hardware/lineage/interfaces/power-libperfmgr \
+diff --git a/extract-files.py b/extract-files.py
+index 3053d3e..9eee489 100755
+--- a/extract-files.py
++++ b/extract-files.py
+@@ -62,7 +62,7 @@ blob_fixups: blob_fixups_user_type = {
+         .add_needed('libgui_shim.so'),
+     'system_ext/lib/libwfdservice.so': blob_fixup()
+         .add_needed('libaudioclient_shim.so')
+-        .replace_needed('android.media.audio.common.types-V3-cpp.so', 'android.media.audio.common.types-V4-cpp.so'),
++        .replace_needed('android.media.audio.common.types-V3-cpp.so', 'android.media.audio.common.types-V5-cpp.so'),
+     'system_ext/lib64/libwfdnative.so': blob_fixup()
+         .add_needed('libinput_shim.so'),
+     'vendor/etc/seccomp_policy/atfwd@2.0.policy': blob_fixup()
+-- 
+2.43.0
+
